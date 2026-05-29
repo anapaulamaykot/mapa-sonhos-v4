@@ -1,0 +1,906 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mapa dos Sonhos — V4 Company</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.44.0/tabler-icons.min.css" />
+
+  <style>
+    /* ── RESET ── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    /* ── TOKENS DO BRANDBOOK V4 ── */
+    :root {
+      --red:          #e50914;
+      --red-dark:     #b20710;
+      --red-deeper:   #80050b;
+      --red-light:    #fdecea;
+      --red-border:   #f7c1c1;
+      --black:        #000000;
+      --dark:         #1a1a1a;
+      --dark-mid:     #333333;
+      --gray:         #666666;
+      --gray-mid:     #999999;
+      --gray-light:   #cccccc;
+      --gray-lighter: #e5e5e5;
+      --white:        #ffffff;
+      --bg:           #f9f9f9;
+      --font:         'Montserrat', sans-serif;
+      --r-sm:         6px;
+      --r-md:         10px;
+      --r-lg:         16px;
+    }
+
+    body {
+      font-family: var(--font);
+      background: var(--bg);
+      color: var(--dark);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    /* ── HEADER ── */
+    .site-header {
+      width: 100%;
+      background: var(--white);
+      border-bottom: 1px solid var(--gray-lighter);
+      padding: 0 2rem;
+      height: 56px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .header-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .logo-mark {
+      width: 32px;
+      height: 32px;
+      background: var(--red);
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .logo-mark svg { width: 20px; height: 20px; }
+    .logo-text {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--dark);
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+    }
+    .header-logo svg { display: block; }
+    .header-tag {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--gray);
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+    }
+
+    /* ── LAYOUT ── */
+    .main {
+      width: 100%;
+      max-width: 560px;
+      padding: 2.5rem 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+
+    /* ── STEPS ── */
+    .step { display: none; flex-direction: column; gap: 1.5rem; animation: fadeUp .25s ease both; }
+    .step.active { display: flex; }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(10px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ── STEP HEADER ── */
+    .step-tag {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--red);
+    }
+    .step-title {
+      font-size: 26px;
+      font-weight: 800;
+      color: var(--black);
+      line-height: 1.2;
+    }
+    .step-desc {
+      font-size: 14px;
+      font-weight: 400;
+      color: var(--gray);
+      line-height: 1.7;
+    }
+    .step-header { display: flex; flex-direction: column; gap: 6px; }
+
+    /* ── PROGRESS ── */
+    .progress-wrap {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .progress-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .progress-label { font-size: 11px; font-weight: 600; color: var(--gray); text-transform: uppercase; letter-spacing: 1px; }
+    .progress-pct   { font-size: 11px; font-weight: 700; color: var(--red); }
+    .progress-bg {
+      background: var(--gray-lighter);
+      border-radius: 999px;
+      height: 3px;
+      overflow: hidden;
+    }
+    .progress-fill {
+      height: 100%;
+      border-radius: 999px;
+      background: var(--red);
+      transition: width .4s ease;
+    }
+
+    /* ── ZONE CARDS ── */
+    .zone-card {
+      background: var(--white);
+      border: 1px solid var(--gray-lighter);
+      border-radius: var(--r-lg);
+      padding: 1.25rem;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .zone-label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--dark);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    .zone-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+    .dot-raizes { background: #7c6f64; }
+    .dot-hoje   { background: var(--gray-mid); }
+    .dot-dois   { background: #185FA5; }
+    .dot-quatro { background: var(--red); }
+    .zone-hint { font-size: 12px; color: var(--gray); line-height: 1.55; }
+
+    textarea {
+      width: 100%;
+      min-height: 88px;
+      font-size: 13px;
+      font-family: var(--font);
+      font-weight: 400;
+      resize: vertical;
+      border-radius: var(--r-md);
+      padding: 10px 12px;
+      background: var(--bg);
+      border: 1px solid var(--gray-lighter);
+      color: var(--dark);
+      outline: none;
+      line-height: 1.6;
+      transition: border-color .15s;
+    }
+    textarea:focus { border-color: var(--red); }
+    textarea::placeholder { color: var(--gray-light); }
+
+    input[type="text"],
+    input[type="password"] {
+      font-size: 14px;
+      font-family: var(--font);
+      font-weight: 500;
+      border-radius: var(--r-md);
+      padding: 10px 14px;
+      background: var(--white);
+      border: 1px solid var(--gray-lighter);
+      color: var(--dark);
+      outline: none;
+      transition: border-color .15s;
+      width: 100%;
+    }
+    input[type="text"]:focus,
+    input[type="password"]:focus { border-color: var(--red); }
+    input::placeholder { color: var(--gray-light); font-weight: 400; }
+
+    /* ── BOTÕES ── */
+    .btn-row { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+
+    .btn-primary {
+      background: var(--red);
+      border: none;
+      border-radius: var(--r-md);
+      padding: 10px 22px;
+      font-size: 13px;
+      font-weight: 700;
+      font-family: var(--font);
+      color: var(--white);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      transition: background .15s, transform .1s;
+      letter-spacing: 0.3px;
+    }
+    .btn-primary:hover  { background: var(--red-dark); }
+    .btn-primary:active { transform: scale(0.98); }
+
+    .btn-outline {
+      background: var(--white);
+      border: 1px solid var(--gray-lighter);
+      border-radius: var(--r-md);
+      padding: 10px 20px;
+      font-size: 13px;
+      font-weight: 600;
+      font-family: var(--font);
+      color: var(--dark-mid);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      transition: border-color .15s, color .15s;
+    }
+    .btn-outline:hover { border-color: var(--gray-mid); color: var(--dark); }
+
+    .btn-ghost {
+      background: transparent;
+      border: none;
+      padding: 8px 10px;
+      font-size: 13px;
+      font-family: var(--font);
+      font-weight: 500;
+      color: var(--gray);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: color .15s;
+    }
+    .btn-ghost:hover { color: var(--dark); }
+
+    .btn-danger {
+      background: transparent;
+      border: 1px solid var(--red-border);
+      border-radius: var(--r-md);
+      padding: 8px 16px;
+      font-size: 12px;
+      font-weight: 600;
+      font-family: var(--font);
+      color: var(--red-dark);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: background .15s;
+    }
+    .btn-danger:hover { background: var(--red-light); }
+
+    /* ── BADGES ── */
+    .badge-success {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      font-weight: 600;
+      color: #166534;
+      background: #f0fdf4;
+      border: 1px solid #86efac;
+      border-radius: var(--r-md);
+      padding: 5px 12px;
+      width: fit-content;
+    }
+    .badge-red {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--red-dark);
+      background: var(--red-light);
+      border: 1px solid var(--red-border);
+      border-radius: 999px;
+      padding: 3px 12px;
+      width: fit-content;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    /* ── DIVIDER ── */
+    .divider { border: none; border-top: 1px solid var(--gray-lighter); }
+
+    /* ── INPUT GROUP ── */
+    .input-group { display: flex; flex-direction: column; gap: 6px; }
+    .input-label { font-size: 12px; font-weight: 700; color: var(--dark-mid); text-transform: uppercase; letter-spacing: 1px; }
+    .input-hint  { font-size: 11px; color: var(--gray); }
+
+    /* ── MURAL ── */
+    .mural-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+      gap: 10px;
+    }
+    .mural-card {
+      background: var(--white);
+      border: 1px solid var(--gray-lighter);
+      border-top: 3px solid var(--red);
+      border-radius: var(--r-lg);
+      padding: 1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .mural-name   { font-size: 10px; font-weight: 700; color: var(--gray); text-transform: uppercase; letter-spacing: 1.2px; }
+    .mural-anchor { font-size: 17px; font-weight: 800; color: var(--black); line-height: 1.2; }
+    .mural-detail { font-size: 11px; color: var(--gray); line-height: 1.5; }
+    .mural-empty  { text-align: center; padding: 2.5rem 1rem; color: var(--gray); font-size: 14px; }
+
+    /* ── ENTRY DETAIL ── */
+    .entry-card {
+      background: var(--white);
+      border: 1px solid var(--gray-lighter);
+      border-radius: var(--r-lg);
+      padding: 1.25rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+    .entry-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 8px;
+    }
+    .entry-name   { font-size: 15px; font-weight: 700; color: var(--black); }
+    .entry-anchor-tag {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--red-dark);
+      background: var(--red-light);
+      border: 1px solid var(--red-border);
+      border-radius: 999px;
+      padding: 3px 12px;
+      white-space: nowrap;
+    }
+    .entry-section { display: flex; flex-direction: column; gap: 4px; }
+    .entry-section-label { font-size: 10px; font-weight: 700; color: var(--gray-mid); text-transform: uppercase; letter-spacing: 1.5px; }
+    .entry-section-text  { font-size: 13px; color: var(--dark-mid); line-height: 1.65; }
+    .entry-ts { font-size: 10px; color: var(--gray-light); }
+
+    /* ── TABS ── */
+    .tab-row {
+      display: flex;
+      gap: 4px;
+      border-bottom: 1px solid var(--gray-lighter);
+      padding-bottom: 0;
+      margin-bottom: -1px;
+    }
+    .tab-btn {
+      background: transparent;
+      border: none;
+      border-bottom: 2px solid transparent;
+      padding: 8px 16px 10px;
+      font-size: 13px;
+      font-weight: 600;
+      font-family: var(--font);
+      color: var(--gray);
+      cursor: pointer;
+      transition: color .15s, border-color .15s;
+    }
+    .tab-btn.active { color: var(--red); border-bottom-color: var(--red); }
+    .tab-btn:hover:not(.active) { color: var(--dark); }
+
+    /* ── LOGIN CARD ── */
+    .login-card {
+      background: var(--white);
+      border: 1px solid var(--gray-lighter);
+      border-radius: var(--r-lg);
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      max-width: 340px;
+    }
+
+    /* ── ADMIN STATS ── */
+    .stats-row {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+    }
+    .stat-card {
+      background: var(--white);
+      border: 1px solid var(--gray-lighter);
+      border-radius: var(--r-md);
+      padding: 1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .stat-value { font-size: 24px; font-weight: 800; color: var(--black); line-height: 1; }
+    .stat-label { font-size: 11px; font-weight: 600; color: var(--gray); text-transform: uppercase; letter-spacing: 1px; }
+
+    /* ── ERROR ── */
+    .error-msg { font-size: 12px; color: var(--red); font-weight: 600; display: none; }
+
+    @media (max-width: 480px) {
+      .main { padding: 1.5rem 1rem; }
+      .step-title { font-size: 22px; }
+      .stats-row { grid-template-columns: 1fr 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header class="site-header">
+    <div class="header-logo">
+<img src="data:image/jpeg;base64,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" alt="V4 Company" style="height:30px;width:30px;border-radius:5px;display:block;flex-shrink:0;" />
+      <span class="logo-text">V4 Company</span>
+    </div>
+    <span class="header-tag">Onboarding Experience</span>
+  </header>
+
+  <main class="main">
+
+    <!-- ── TELA INICIAL ── -->
+    <div class="step active" id="step-welcome">
+      <div class="step-header">
+        <span class="step-tag">Dinâmica · Onboarding</span>
+        <h1 class="step-title">Mapa dos Sonhos</h1>
+        <p class="step-desc">Desenhe sua jornada nos próximos 4 anos na V4. Sem julgamentos, sem respostas erradas — apenas você e seus objetivos.</p>
+      </div>
+      <div class="input-group">
+        <label class="input-label" for="investor-name">Seu nome</label>
+        <input type="text" id="investor-name" placeholder="Como você se chama?" maxlength="60" style="max-width:320px;" />
+      </div>
+      <div class="btn-row">
+        <button class="btn-primary" onclick="startMap()">
+          Começar meu mapa <i class="ti ti-arrow-right"></i>
+        </button>
+        <button class="btn-ghost" onclick="goToAdmin()">
+          <i class="ti ti-lock"></i> Facilitador
+        </button>
+      </div>
+    </div>
+
+    <!-- ── MAPA ── -->
+    <div class="step" id="step-map">
+      <div class="progress-wrap">
+        <div class="progress-meta">
+          <span class="progress-label" id="map-tag">Zona 1 de 3</span>
+          <span class="progress-pct" id="prog-pct">33%</span>
+        </div>
+        <div class="progress-bg"><div class="progress-fill" id="prog" style="width:33%"></div></div>
+      </div>
+
+      <div class="step-header">
+        <h2 class="step-title" id="map-title">Quem você é hoje?</h2>
+        <p class="step-desc" id="map-desc">Ponto de partida honesto. O que você sabe fazer bem? O que ainda te trava?</p>
+      </div>
+
+      <div class="zone-card" id="zone-raizes" style="display:none">
+        <div class="zone-label"><div class="zone-dot dot-raizes"></div>Minhas Raízes</div>
+        <p class="zone-hint">Quem você era? Quais experiências, pessoas ou momentos formaram quem você é hoje?</p>
+        <textarea id="txt-raizes" placeholder="Ex: Cresci em uma família empreendedora, passei por desafios que me ensinaram resiliência, sempre fui movido por..." maxlength="600"></textarea>
+      </div>
+
+      <div class="zone-card" id="zone-hoje" style="display:none">
+        <div class="zone-label"><div class="zone-dot dot-hoje"></div>Hoje</div>
+        <p class="zone-hint">Suas habilidades, pontos de desenvolvimento — o que você considera muito bom em você?</p>
+        <textarea id="txt-hoje" placeholder="Ex: Sou muito bom em criar conexões, tenho facilidade com vendas, e ainda quero desenvolver minha gestão de tempo..." maxlength="600"></textarea>
+      </div>
+
+      <div class="zone-card" id="zone-dois" style="display:none">
+        <div class="zone-label"><div class="zone-dot dot-dois"></div>Em 2 anos</div>
+        <p class="zone-hint">Seu primeiro grande ciclo dentro da V4. O que você quer ter realizado? Qual o plano de ação?</p>
+        <textarea id="txt-dois" placeholder="Ex: Quero ter concluído meu primeiro ciclo com resultados sólidos, minha unidade estruturada e um plano claro para os próximos passos..." maxlength="600"></textarea>
+      </div>
+
+      <div class="zone-card" id="zone-quatro" style="display:none">
+        <div class="zone-label"><div class="zone-dot dot-quatro"></div>Em 4 anos</div>
+        <p class="zone-hint">Onde você quer estar? Profissional, intelectual, financeiro e emocional — pense grande.</p>
+        <textarea id="txt-quatro" placeholder="Ex: Profissionalmente serei sócio de resultados com equity real. Intelectualmente serei referência na minha área. Financeiramente terei conquistado minha liberdade. Emocionalmente serei uma pessoa mais inteira e equilibrada..." maxlength="800"></textarea>
+      </div>
+
+      <div class="btn-row">
+        <button class="btn-primary" id="btn-map-next" onclick="mapNext()">
+          Próximo <i class="ti ti-arrow-right"></i>
+        </button>
+        <button class="btn-ghost" onclick="mapBack()">Voltar</button>
+      </div>
+    </div>
+
+    <!-- ── ÂNCORA ── -->
+    <div class="step" id="step-anchor">
+      <div class="progress-wrap">
+        <div class="progress-meta">
+          <span class="progress-label">Quase lá</span>
+          <span class="progress-pct">80%</span>
+        </div>
+        <div class="progress-bg"><div class="progress-fill" style="width:80%"></div></div>
+      </div>
+
+      <div class="step-header">
+        <span class="step-tag">Passo final</span>
+        <h2 class="step-title">Sua palavra-âncora</h2>
+        <p class="step-desc">Se você tivesse que resumir sua jornada dos próximos 4 anos em uma única palavra, qual seria?</p>
+      </div>
+
+      <div class="input-group">
+        <input type="text" id="txt-anchor" placeholder="Ex: Liberdade, Crescimento, Impacto..." maxlength="30" style="max-width:280px;" />
+        <span class="input-hint">Essa palavra aparece no mural coletivo — todos os investidores verão.</span>
+      </div>
+
+      <div class="btn-row">
+        <button class="btn-primary" id="btn-save" onclick="saveEntry()">
+          <i class="ti ti-check"></i> Salvar meu mapa
+        </button>
+        <button class="btn-ghost" onclick="goToStep('step-map')">Voltar</button>
+      </div>
+    </div>
+
+    <!-- ── CONCLUÍDO ── -->
+    <div class="step" id="step-done">
+      <div class="progress-wrap">
+        <div class="progress-meta">
+          <span class="progress-label">Concluído</span>
+          <span class="progress-pct">100%</span>
+        </div>
+        <div class="progress-bg"><div class="progress-fill" style="width:100%"></div></div>
+      </div>
+
+      <div class="step-header">
+        <span class="step-tag">Mapa salvo</span>
+        <h2 class="step-title" id="done-title">Mapa salvo!</h2>
+        <p class="step-desc">Sua jornada foi registrada. Quando o facilitador projetar o mural, você verá sua palavra-âncora junto com a de todos do grupo.</p>
+      </div>
+
+      <div class="badge-success"><i class="ti ti-check"></i> Salvo no mural coletivo</div>
+
+      <hr class="divider" />
+
+      <div class="btn-row">
+        <button class="btn-primary" onclick="resetForm()">
+          <i class="ti ti-user-plus"></i> Próximo investidor
+        </button>
+        <button class="btn-outline" onclick="goToStep('step-welcome')">
+          <i class="ti ti-home"></i> Início
+        </button>
+      </div>
+    </div>
+
+    <!-- ── ADMIN LOGIN ── -->
+    <div class="step" id="step-admin-login">
+      <div class="step-header">
+        <span class="step-tag">Área restrita</span>
+        <h2 class="step-title">Acesso do facilitador</h2>
+        <p class="step-desc">Esta área é exclusiva para o facilitador do Onboarding.</p>
+      </div>
+      <div class="login-card">
+        <div class="input-group">
+          <label class="input-label" for="admin-pass">Senha</label>
+          <input type="password" id="admin-pass" placeholder="••••••••"
+            onkeydown="if(event.key==='Enter')checkPass()" />
+        </div>
+        <span class="error-msg" id="pass-error"><i class="ti ti-alert-circle"></i> Senha incorreta.</span>
+        <div class="btn-row">
+          <button class="btn-primary" onclick="checkPass()">Entrar <i class="ti ti-arrow-right"></i></button>
+          <button class="btn-ghost" onclick="goToStep('step-welcome')">Voltar</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── ADMIN PAINEL ── -->
+    <div class="step" id="step-admin">
+      <div class="step-header">
+        <span class="step-tag">Facilitador</span>
+        <h2 class="step-title">Painel do Onboarding</h2>
+      </div>
+
+      <div class="stats-row" id="admin-stats">
+        <div class="stat-card">
+          <span class="stat-value" id="stat-total">0</span>
+          <span class="stat-label">Mapas salvos</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-value" id="stat-hoje">—</span>
+          <span class="stat-label">Hoje</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-value" id="stat-last">—</span>
+          <span class="stat-label">Último registro</span>
+        </div>
+      </div>
+
+      <div class="tab-row">
+        <button class="tab-btn active" id="tab-mural"  onclick="switchTab('mural')">Mural coletivo</button>
+        <button class="tab-btn"        id="tab-detail" onclick="switchTab('detail')">Mapas completos</button>
+      </div>
+
+      <div id="view-mural"><div id="mural-container"><p class="mural-empty">Carregando...</p></div></div>
+      <div id="view-detail" style="display:none"><div id="detail-container"><p class="mural-empty">Carregando...</p></div></div>
+
+      <div class="btn-row">
+        <button class="btn-outline" onclick="loadAdmin()"><i class="ti ti-refresh"></i> Atualizar</button>
+        <button class="btn-danger"  onclick="clearAll()"><i class="ti ti-trash"></i> Limpar mural</button>
+        <button class="btn-ghost"   onclick="goToStep('step-welcome')"><i class="ti ti-home"></i> Início</button>
+      </div>
+    </div>
+
+  </main>
+
+  <script>
+    /* ================================================================
+       CONFIGURAÇÃO SUPABASE
+       Projeto: Aula Onboarding Experience
+    ================================================================ */
+    const ADMIN_PASSWORD  = 'v4company2030';
+    const SUPABASE_URL    = 'https://ttxjyaeubmoglkrfohqs.supabase.co';
+    const SUPABASE_KEY    = 'sb_publishable_wedxcdFDgBKJQvQJnabFXg_LcVg5kQ_';
+
+    /* ── SUPABASE API ── */
+    const sb = {
+      headers: {
+        'Content-Type': 'application/json',
+        'apikey': SUPABASE_KEY,
+        'Authorization': 'Bearer ' + SUPABASE_KEY
+      },
+
+      async insert(row) {
+        const res = await fetch(SUPABASE_URL + '/rest/v1/mapas', {
+          method: 'POST',
+          headers: { ...this.headers, 'Prefer': 'return=minimal' },
+          body: JSON.stringify(row)
+        });
+        return res.ok;
+      },
+
+      async fetchAll() {
+        const res = await fetch(
+          SUPABASE_URL + '/rest/v1/mapas?select=*&order=created_at.asc',
+          { headers: this.headers }
+        );
+        if (!res.ok) return [];
+        return res.json();
+      },
+
+      async deleteAll() {
+        const res = await fetch(
+          SUPABASE_URL + '/rest/v1/mapas?id=gte.0',
+          { method: 'DELETE', headers: this.headers }
+        );
+        return res.ok;
+      }
+    };
+
+    /* ── ESTADO ── */
+    let mapZone = 1;
+    let currentName = '';
+
+    /* ── NAVEGAÇÃO ── */
+    function goToStep(id) {
+      document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
+      document.getElementById(id).classList.add('active');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function goToAdmin() {
+      document.getElementById('admin-pass').value = '';
+      document.getElementById('pass-error').style.display = 'none';
+      goToStep('step-admin-login');
+    }
+
+    function checkPass() {
+      const val = document.getElementById('admin-pass').value;
+      if (val === ADMIN_PASSWORD) {
+        goToStep('step-admin');
+        loadAdmin();
+      } else {
+        document.getElementById('pass-error').style.display = 'flex';
+      }
+    }
+
+    /* ── MAPA ── */
+    function startMap() {
+      const name = document.getElementById('investor-name').value.trim();
+      if (!name) { document.getElementById('investor-name').focus(); return; }
+      currentName = name;
+      mapZone = 1;
+      showZone(1);
+      goToStep('step-map');
+    }
+
+    function showZone(z) {
+      document.getElementById('zone-raizes').style.display = z >= 1 ? '' : 'none';
+      document.getElementById('zone-hoje').style.display   = z >= 2 ? '' : 'none';
+      document.getElementById('zone-dois').style.display   = z >= 3 ? '' : 'none';
+      document.getElementById('zone-quatro').style.display = z >= 4 ? '' : 'none';
+
+      const tags   = ['Zona 1 de 4', 'Zona 2 de 4', 'Zona 3 de 4', 'Zona 4 de 4'];
+      const titles = ['De onde você vem?', 'Quem você é hoje?', 'Onde quer chegar em 2 anos?', 'Como se vê em 4 anos?'];
+      const descs  = [
+        'Antes de olhar para frente, olhe para trás. Quem você era? O que te trouxe até aqui?',
+        'Ponto de partida honesto. O que você tem de melhor? O que ainda quer desenvolver?',
+        'Seu primeiro grande ciclo na V4. O que quer ter realizado? Qual o plano de ação?',
+        'Pense grande nas quatro dimensões: profissional, intelectual, financeiro e emocional.'
+      ];
+      const pcts   = ['25%', '50%', '75%', '90%'];
+
+      document.getElementById('map-tag').textContent   = tags[z - 1];
+      document.getElementById('map-title').textContent = titles[z - 1];
+      document.getElementById('map-desc').textContent  = descs[z - 1];
+      document.getElementById('prog').style.width      = pcts[z - 1];
+      document.getElementById('prog-pct').textContent  = pcts[z - 1];
+      document.getElementById('btn-map-next').innerHTML =
+        (z < 4 ? 'Próximo' : 'Continuar') + ' <i class="ti ti-arrow-right"></i>';
+    }
+
+    function mapNext() {
+      if (mapZone < 4) { mapZone++; showZone(mapZone); }
+      else goToStep('step-anchor');
+    }
+
+    function mapBack() {
+      if (mapZone > 1) { mapZone--; showZone(mapZone); }
+      else goToStep('step-welcome');
+    }
+
+    async function saveEntry() {
+      const anchor = document.getElementById('txt-anchor').value.trim();
+      if (!anchor) { document.getElementById('txt-anchor').focus(); return; }
+
+      const btn = document.getElementById('btn-save');
+      if (btn) { btn.disabled = true; btn.innerHTML = '<i class="ti ti-loader"></i> Salvando...'; }
+
+      const entry = {
+        name:   currentName,
+        raizes: document.getElementById('txt-raizes').value.trim(),
+        hoje:   document.getElementById('txt-hoje').value.trim(),
+        dois:   document.getElementById('txt-dois').value.trim(),
+        quatro: document.getElementById('txt-quatro').value.trim(),
+        anchor
+      };
+
+      const ok = await sb.insert(entry);
+
+      if (btn) { btn.disabled = false; btn.innerHTML = '<i class="ti ti-check"></i> Salvar meu mapa'; }
+
+      if (ok) {
+        document.getElementById('done-title').textContent =
+          'Mapa salvo, ' + currentName.split(' ')[0] + '!';
+        goToStep('step-done');
+      } else {
+        alert('Erro ao salvar. Verifique sua conexão e tente novamente.');
+      }
+    }
+
+    function resetForm() {
+      ['investor-name','txt-raizes','txt-hoje','txt-dois','txt-quatro','txt-anchor']
+        .forEach(id => { document.getElementById(id).value = ''; });
+      currentName = '';
+      mapZone = 1;
+      goToStep('step-welcome');
+    }
+
+    /* ── ADMIN ── */
+    let allEntries = [];
+
+    async function loadAdmin() {
+      document.getElementById('mural-container').innerHTML  = '<p class="mural-empty">Carregando...</p>';
+      document.getElementById('detail-container').innerHTML = '<p class="mural-empty">Carregando...</p>';
+
+      allEntries = await sb.fetchAll();
+
+      const today = new Date().toDateString();
+      const todayCount = allEntries.filter(e => new Date(e.created_at).toDateString() === today).length;
+      const last = allEntries.length
+        ? new Date(allEntries[allEntries.length - 1].created_at)
+            .toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })
+        : '—';
+
+      document.getElementById('stat-total').textContent = allEntries.length;
+      document.getElementById('stat-hoje').textContent  = todayCount;
+      document.getElementById('stat-last').textContent  = last;
+
+      renderMural();
+      renderDetail();
+    }
+
+    function switchTab(tab) {
+      document.getElementById('tab-mural').classList.toggle('active',  tab === 'mural');
+      document.getElementById('tab-detail').classList.toggle('active', tab === 'detail');
+      document.getElementById('view-mural').style.display  = tab === 'mural'  ? '' : 'none';
+      document.getElementById('view-detail').style.display = tab === 'detail' ? '' : 'none';
+    }
+
+    function renderMural() {
+      const c = document.getElementById('mural-container');
+      if (!allEntries.length) {
+        c.innerHTML = '<p class="mural-empty">Nenhum mapa salvo ainda. Os investidores aparecem aqui após completar a dinâmica.</p>';
+        return;
+      }
+      const grid = document.createElement('div');
+      grid.className = 'mural-grid';
+      allEntries.forEach(e => {
+        const card = document.createElement('div');
+        card.className = 'mural-card';
+        card.innerHTML = `
+          <span class="mural-name">${esc(e.name)}</span>
+          <span class="mural-anchor">${esc(e.anchor)}</span>
+          ${e.quatro ? `<span class="mural-detail">${esc(e.quatro.substring(0,65))}${e.quatro.length > 65 ? '...' : ''}</span>` : ''}
+        `;
+        grid.appendChild(card);
+      });
+      c.innerHTML = '';
+      c.appendChild(grid);
+    }
+
+    function renderDetail() {
+      const c = document.getElementById('detail-container');
+      if (!allEntries.length) {
+        c.innerHTML = '<p class="mural-empty">Nenhum mapa salvo ainda.</p>';
+        return;
+      }
+      c.innerHTML = '';
+      allEntries.forEach(e => {
+        const card = document.createElement('div');
+        card.className = 'entry-card';
+        card.innerHTML = `
+          <div class="entry-header">
+            <span class="entry-name">${esc(e.name)}</span>
+            <span class="entry-anchor-tag">${esc(e.anchor)}</span>
+          </div>
+          ${e.raizes ? `<div class="entry-section"><span class="entry-section-label">Raízes</span><span class="entry-section-text">${esc(e.raizes)}</span></div>` : ''}
+          ${e.hoje   ? `<div class="entry-section"><span class="entry-section-label">Hoje</span><span class="entry-section-text">${esc(e.hoje)}</span></div>` : ''}
+          ${e.dois   ? `<div class="entry-section"><span class="entry-section-label">Em 2 anos</span><span class="entry-section-text">${esc(e.dois)}</span></div>` : ''}
+          ${e.quatro ? `<div class="entry-section"><span class="entry-section-label">Em 4 anos</span><span class="entry-section-text">${esc(e.quatro)}</span></div>` : ''}
+          <span class="entry-ts">${new Date(e.created_at).toLocaleString('pt-BR')}</span>
+        `;
+        c.appendChild(card);
+      });
+    }
+
+    async function clearAll() {
+      if (!confirm('Limpar todos os mapas salvos? Esta ação não pode ser desfeita.')) return;
+      const ok = await sb.deleteAll();
+      if (ok) {
+        allEntries = [];
+        renderMural();
+        renderDetail();
+        document.getElementById('stat-total').textContent = '0';
+        document.getElementById('stat-hoje').textContent  = '0';
+        document.getElementById('stat-last').textContent  = '—';
+      } else {
+        alert('Erro ao limpar. Tente novamente.');
+      }
+    }
+
+    function esc(str) {
+      if (!str) return '';
+      return str
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;');
+    }
+  </script>
+</body>
+</html>
